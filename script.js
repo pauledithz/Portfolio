@@ -41,23 +41,34 @@ window.addEventListener('scroll', () => {
 
 // Scroll Reveal Animation via Intersection Observer
 function reveal() {
-    const reveals = document.querySelectorAll(".reveal");
-    
-    const observer = new IntersectionObserver((entries) => {
+    const defaultObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add("active");
-                // Optional: stop observing once revealed
-                // observer.unobserve(entry.target);
             }
         });
     }, {
-        threshold: 0.1, // Trigger when 10% of element is visible
+        threshold: 0.1,
         rootMargin: "0px 0px -50px 0px"
     });
 
-    reveals.forEach(element => {
-        observer.observe(element);
+    const scrollObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add("active");
+            }
+        });
+    }, {
+        threshold: 0.25,
+        rootMargin: "0px 0px -5% 0px"
+    });
+
+    document.querySelectorAll(".reveal, .reveal-group").forEach(element => {
+        defaultObserver.observe(element);
+    });
+
+    document.querySelectorAll(".reveal-scroll").forEach(element => {
+        scrollObserver.observe(element);
     });
 }
 
